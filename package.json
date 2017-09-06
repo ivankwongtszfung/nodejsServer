@@ -1,0 +1,15 @@
+{
+  "name": "noderserver",
+  "version": "1.0.0",
+  "description": "this is a test server for 2720",
+  "main": "server.js",
+  "scripts": {
+    "test": "make test",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "npm"
+  ],
+  "author": "",
+  "license": "ISC"
+}
