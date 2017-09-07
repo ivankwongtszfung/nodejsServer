@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/app.js"></script>
+
+
+    <title>view1</title>
+  </head>
+  <body>
+    <div ng-app="myApp" ng-controller="ctrl">
+      <br>
+
+      <div class="container">
+        <div class="alert alert-danger hidden">
+          <strong>Error!</strong> data can not load successfully.
+        </div>
+        <div class="col-sm-8">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Company</th>
+                <th>Job</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="(key, value) in (filteredItems = (name | filter:search))" ng-click="inspect(name)" id='key'>
+                <td class='data_{{key}}'></td>
+                <td class='data_{{key}}'>{{value['company']['name']}}</td>
+                <td class='data_{{key}}'>{{value['title']}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="search-panel col-sm-4">
+          <div class="col-centered vcenter inside-panel">
+            <div class="input-group search-group">
+              <input class="form-control search" type="text" name="search" value="" ng-model="textSearch">
+              <span class="glyphicon glyphicon-search input-group-addon search-icon"></span>
+            </div>
+            <br>
+            <div class="salary">
+              <p>salary</p>
+              <div slider max=100000 min=0 ng-model='salary' id='workHour'></div>
+              {{salary}}
+            </div>
+
+            <br>
+            <div class="workHour">
+              <p>workHour</p>
+              <div slider max=24 min=0  ng-model='workHour' id='workHour'></div>
+              {{workHour}}
+          </div>
+
+
+      </div>
+    </div>
+    <div class="result-panel col-sm-4 hidden">
+      <div class=" panel panel-default max-size">
+          <div class="panel-heading">
+            <strong>Job Detail</strong>
+            <button type="button" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="panel-body col-centered">
+            <div class="change-term">
+              <button type="button" class="btn btn-default left change" ng-click="prev()" aria-label="Left Align">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="btn btn-default right change" ng-click="next()" aria-label="Left Align">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="data">
+              <p>
+                {{jobSelect.title}} @ {{jobSelect.company.name}}
+                <br>
+                We are {{jobSelect.company.name}}
+                <br>
+                Requirements: ...
+                <br>
+                Salary: {{jobSelect.detail}}
+                <br>
+                Work hour: {{jobSelect.workhour}}
+              </p>
+              <div class="btn-centered">
+                <button class='btn' type="button" name="button">apply</button>
+              </div>
+            </div>
+          </div>
+
+    </div>
+  </div>
+  </body>
+</html>

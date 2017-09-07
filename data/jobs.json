@@ -1,0 +1,88 @@
+{
+  "jobs": [
+    {
+      "title": "Cook",
+      "worktime": [
+        "7:00",
+        "18:00"
+      ],
+      "salary": 80000,
+      "detail": "...",
+      "company": {
+        "name": "KFC"
+      }
+    },
+    {
+      "title": "Washer",
+      "worktime": [
+        "11:00",
+        "14:00"
+      ],
+      "salary": 36000,
+      "detail": "...",
+      "company": {
+        "name": "KFC"
+      }
+    },
+    {
+      "title": "Cashier",
+      "worktime": [
+        "10:00",
+        "19:00"
+      ],
+      "salary": 60000,
+      "detail": "...",
+      "company": {
+        "name": "PizzaHut"
+      }
+    },
+    {
+      "title": "Washer",
+      "worktime": [
+        "17:00",
+        "21:00"
+      ],
+      "salary": 42000,
+      "detail": "...",
+      "company": {
+        "name": "PizzaHut"
+      }
+    },
+    {
+      "title": "Washer",
+      "worktime": [
+        "11:00",
+        "19:00"
+      ],
+      "salary": 88000,
+      "detail": "...",
+      "company": {
+        "name": "Subway"
+      }
+    },
+    {
+      "title": "Washer",
+      "worktime": [
+        "9:00",
+        "18:00"
+      ],
+      "salary": 77000,
+      "detail": "...",
+      "company": {
+        "name": "McDonalds"
+      }
+    },
+    {
+      "title": "Cleaner",
+      "worktime": [
+        "9:00",
+        "18:00"
+      ],
+      "salary": 90000,
+      "detail": "...",
+      "company": {
+        "name": "McDonalds"
+      }
+    }
+  ]
+}
