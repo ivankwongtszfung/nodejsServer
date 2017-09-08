@@ -3,8 +3,9 @@ var app = angular.module("myApp",[]);
 var key=0;
 
 app.controller('ctrl',['$scope','$http',function($scope,$http){
-  $http.get("data/jobs.json").then(function success(response){
-    $scope.name=response['data']['jobs'];
+  $http.post("/getData").then(function success(response){
+    console.log(response['data']['data']);
+    $scope.name=response['data']['data'];
   },function error(response){
     $scope.name="";
     $('.alert').removeClass('hidden');
