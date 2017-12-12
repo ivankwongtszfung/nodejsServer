@@ -1,0 +1,20 @@
+		{
+			"ID" : 1,
+			"Title" : "Bread",
+			"Description" : "Yummy and makes you live",
+			"Image" : "",
+			"Token_value" : 10,
+			"Available_quantity" : 5,
+			"Tags" : ["tasteGood","jeng"],
+			"Creation_timestamp" : 1512919970000
+		}
+		{
+			"ID" : 2,
+			"Title" : "Apple",
+			"Description" : "Juicy and big",
+			"Image" : "",
+			"Token_value" : 5,
+			"Available_quantity" : 3,
+			"Tags" : ["tasty","juicy"],
+			"Creation_timestamp" : 1512919970000
+		}
