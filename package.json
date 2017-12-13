@@ -11,5 +11,8 @@
     "npm"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "json2csv": "^3.11.5"
+  }
 }

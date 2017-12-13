@@ -3,8 +3,9 @@ var fs = require('fs');
 var express = require('express');
 
 var app = express();
-var login = require('./modules/login');
+var user = require('./modules/user');
 var item = require('./modules/item');
+var upload = require('./modules/upload');
 
 //MongoDB connection
 var mongoose=require('mongoose');
@@ -33,8 +34,9 @@ process.on('SIGINT', function() {  	//upon node process end
 app.use('/js',express.static(__dirname + '/js'));
 app.use('/css',express.static(__dirname + '/css'));
 app.use('/data',express.static(__dirname + '/data'));
-app.use('/login',login);
+app.use('/user',user);
 app.use('/item',item);
+app.use('/upload',upload);
 
 app.get('/view', function (req, res) {
 	res.sendfile('view.html')

@@ -7,16 +7,8 @@ router.use(bodyParser.urlencoded({extended:false}));
 
 //MongoDB
 var mongoose=require('mongoose');
-var ItemSchema = mongoose.Schema({
-        Title: String,
-        Description: String,
-        Image: String,
-        Token_value: Number,
-        Available_quantity: Number,
-        Tags: Array,
-        Creation_timestamp: Date
-});
-var items = mongoose.model('items', ItemSchema);
+var items = require('./item_model.js');
+var users = require('./user_model.js');
 
 router.get('/hi',function(req,res){
 	res.send("hi from item api");
@@ -165,16 +157,50 @@ router.post('/redeemItem',function(req,res){
 		function(err,result){
 			if(err){
 				res.status(500).json({success:false, message:'Server Error'});
-				return;
 			}
-			if(result.length > 0){
-				res.json({success:true, message: result});
-				return;
+
+			if(result.length > 0){	//if target item found
+				if(result[0].Available_quantity<1){	//if no remaining left
+					res.json({success:false, message:'The item has no available quantity'});
+					return;
+				}
+				users.find({Username: username},function(err,userResult){		//Get user balance
+					if(err){
+						res.status(500).json({success:false, message:'Server Error'});
+					}else{
+						if(userResult.length<1){	//if no such user
+							res.json({success:false, message:'No such user'});
+							return;
+						}
+						var userBalance = userResult[0].Balance;
+						if(userBalance<result[0].Token_value){		//if user not enough credit
+							res.json({success:false, message:'Not enough credit'});
+							return;
+						}
+						var	update = {$push:{"Redeemed" : {_id: result[0]._id, Title:result[0].Title, Token_value: result[0].Token_value, Redeemed_timestamp: Date.now()}}, //keep redeem record
+							  $set:{'Balance' : userBalance - result[0].Token_value}}; //deduct user balance
+						users.update({Username: username},update,function(err,raw){
+							if(err){
+								res.status(500).json({success:false, message:'Server Error'});
+							}else{
+								//available quantity of item - 1
+								items.update({_id: objectId},{$set:{'Available_quantity': result[0].Available_quantity - 1}}, function(err,raw){
+									if(err){
+										res.status(500).json({success:false, message:'Server Error'});
+										return;
+									}else{
+										res.json({success:true, message:raw});	//return redeem success
+									}
+								});
+							}
+						});
+					}
+				});
 			}else{
-				res.json({success:true, message:'No item found'});
-				return;
+				res.json({success:false, message:'No item found'});
 			}
-		});
+		}
+	);
 });
 
 module.exports = router;
