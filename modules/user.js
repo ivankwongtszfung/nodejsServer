@@ -5,6 +5,9 @@ var router = express.Router();
 var md5 = require( 'md5' );
 var json2csv = require('json2csv');
 var path = require('path');
+var jwt = require('jsonwebtoken');
+
+var secretKey = "ilovecjcjcjcjcj";//jwt webtoken secret
 
 //bodyparser
 var bodyParser = require('body-parser');
@@ -33,7 +36,10 @@ router.post('/login',function(req,res){
 			}
 
 			if(results.length > 0){
-				res.status(200).json({success:true, message:'Login Successfully'});
+				var token = jwt.sign(results[0].toObject(), secretKey, {
+					expiresIn: 60*60*24
+				});
+				res.status(200).json({success:true, message: 'Enjoy your token', token: token});
 				return;
 			}else{
 				res.status(401).json({success:false, message:'Incorrect username or passowrd'});

@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "json2csv": "^3.11.5"
+    "json2csv": "^3.11.5",
+    "jsonwebtoken": "^8.1.0"
   }
 }
