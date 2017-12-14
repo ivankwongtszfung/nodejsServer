@@ -1,18 +1,31 @@
-		{
+		[{
 			"Username": "Sam",
 			"Password":	"6912A82FE02B1EEC067C057C3C8FAE9B",
+
 			"Balance":	10,
 			"Redeemed": []
-		}
+		},
 		{
 			"Username": "ivan",
 			"Password":	"6912A82FE02B1EEC067C057C3C8FAE9B",
 			"Balance":	87,
 			"Redeemed": []
-		}
+		},
 		{
 			"Username": "testing",
 			"Password":	"6912A82FE02B1EEC067C057C3C8FAE9B",
 			"Balance":	1000,
 			"Redeemed": []
-		}
+		},
+		{
+			"Username": "ivan",
+			"Password":	"6912A82FE02B1EEC067C057C3C8FAE9B",
+			"balance":	87,
+			"redeemed": []
+		},
+		{
+			"Username": "testing",
+			"Password":	"6912A82FE02B1EEC067C057C3C8FAE9B",
+			"balance":	1000,
+			"redeemed": []
+		}]

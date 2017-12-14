@@ -22,13 +22,14 @@ router.get('/hi',function(req,res){
 });
 
 router.post('/login',function(req,res){
+	console.log(req.body);
 	var username = req.body['username'];
 	var password = req.body['password'];
 
 	if (req.body.username === undefined || req.body.password === undefined) {
-    	res.status(401).json({success:false, message:'Missing Credentials'});
+    	res.status(401).json({success:false, message:'Missing Username or Password'});
     	return;
-  	} else{ 
+  	} else{
 		users.find({Username: username, Password: md5(password).toUpperCase()},function(err,results){
 			if(err){
 				console.log(err);

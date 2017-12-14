@@ -60,3 +60,19 @@ img.slider{
 .carousel-inner > .item > img {
     margin: 0 auto;
 }
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+.bd-footer {
+    padding: 2rem 0;
+    margin-top: 4rem;
+    font-size: 85%;
+    text-align: center;
+    background-color: #f7f7f7;
+}
+.text-muted {
+    color: #636c72!important;
+}

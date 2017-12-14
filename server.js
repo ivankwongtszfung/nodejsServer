@@ -43,6 +43,7 @@ app.use('/img',express.static(__dirname + '/img'));
 
 app.use('/item',item);
 app.use('/upload',upload);
+app.use('/img',express.static(__dirname + '/img'));
 
 app.get('/', function (req, res) {
 	res.sendfile('view.html')
@@ -50,6 +51,10 @@ app.get('/', function (req, res) {
 
 app.get('/login', function (req, res) {
 	res.sendfile('login.html')
+});
+
+app.get('/product', function (req, res) {
+	res.sendfile('product.html')
 });
 
 app.post('/getData',function(req,res){
