@@ -50,6 +50,18 @@ router.post('/login',function(req,res){
 	}
 });
 
+router.get('/verifyToken', (req, res) => {
+  jwt.verify(req.headers['authorization'], secretKey, (err, decoded) => {
+    if (err) {
+      console.log(err);
+      res.status(401).json(err);
+    } else {
+      console.log(decoded);
+      res.json(decoded);
+    }
+  })
+});
+
 router.get('/showRedeemedItem',function(req,res){
 	var username = req.query['username'];
 	users.find({Username: username},function(err,result){
