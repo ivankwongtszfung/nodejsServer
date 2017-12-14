@@ -1,104 +1,212 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="js/app.js"></script>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="js/app.js"></script>
 
 
-    <title>view1</title>
-  </head>
-  <body>
-    <div ng-app="myApp" ng-controller="ctrl">
-      <br>
+  <title>view1</title>
+</head>
+<body ng-app="myApp" ng-controller="ctrl">
+ <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">CSCI2720-Final Project</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse in" aria-expanded="true" style="">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Item</a></li>
+        <li><a href="#">Redeem</a></li>
+        <!--
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-header">Nav header</li>
+            <li><a href="#">Separated link</a></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      -->
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="./login/">Login</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container-fluid -->
+</nav>
+<div class="container">
+  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="1" class=""></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="2" class=""></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+      <div class="item active">
+        <img class="slider" src="img/slider_1.jpg" alt="First slide">
+      </div>
+      <div class="item">
+        <img class="slider" src="img/slider_2.jpg" alt="Second slide">
+      </div>
+      <div class="item">
+        <img class="slider" src="img/slider_3.jpg" alt="Third slide">
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
 
-      <div class="container">
-        <div class="alert alert-danger hidden">
-          <strong>Error!</strong> data can not load successfully.
+<br>
+
+<div class="container">
+
+  <div ng-repeat="(key, value) in items" >
+
+    <div class="col-lg-4 col-md-4 mb-4 col-xs-4	col-sm-4">
+      <div class="card h-100">
+        <a href="#"><img class="card-img-top" ng-src="img/{{value.Title}}.jpg" alt="http://placehold.it/700x400"></a>
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="#">{{value.Title}}</a>
+          </h4>
+          <h4>Token:${{value.Token_value}}</h4>
         </div>
-        <div class="col-sm-8">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Company</th>
-                <th>Job</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="(key, value) in (filteredItems = (name | filter:search))" ng-click="inspect(name)" id='key'>
-                <td class='data_{{key}}'></td>
-                <td class='data_{{key}}'>{{value['company']['name']}}</td>
-                <td class='data_{{key}}'>{{value['title']}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="search-panel col-sm-4">
-          <div class="col-centered vcenter inside-panel">
-            <div class="input-group search-group">
-              <input class="form-control search" type="text" name="search" value="" ng-model="textSearch">
-              <span class="glyphicon glyphicon-search input-group-addon search-icon"></span>
-            </div>
-            <br>
-            <div class="salary">
-              <p>salary</p>
-              <div slider max=100000 min=0 ng-model='salary' id='workHour'></div>
-              {{salary}}
-            </div>
+        <div class="card-footer">
+          <small class="text-muted">Only {{value.Available_quantity}} left</small>
+          <small class="text-muted">{{value.Creation_timestamp}}</small>
 
-            <br>
-            <div class="workHour">
-              <p>workHour</p>
-              <div slider max=24 min=0  ng-model='workHour' id='workHour'></div>
-              {{workHour}}
+        </div>
+      </div>
+    </div>
+
+<!--
+      <div class="col-lg-4 col-md-4 mb-4 col-xs-4	col-sm-4">
+        <div class="card h-100">
+          <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+          <div class="card-body">
+            <h4 class="card-title">
+              <a href="#">Item One</a>
+            </h4>
+            <h5>$24.99</h5>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
           </div>
+          <div class="card-footer">
+            <small class="text-muted">★ ★ ★ ★ ☆</small>
+          </div>
+        </div>
+      </div>
 
 
+
+    </div>
+
+  </div>
+  <div >
+    <div class="alert alert-danger hidden">
+      <strong>Error!</strong> data can not load successfully.
+    </div>
+    <div class="col-sm-8">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Company</th>
+            <th>Job</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(key, value) in (filteredItems = (name | filter:search))" ng-click="inspect(name)" id='key'>
+            <td class='data_{{key}}'></td>
+            <td class='data_{{key}}'>{{value['company']['name']}}</td>
+            <td class='data_{{key}}'>{{value['title']}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="search-panel col-sm-4">
+      <div class="col-centered vcenter inside-panel">
+        <div class="input-group search-group">
+          <input class="form-control search" type="text" name="search" value="" ng-model="textSearch">
+          <span class="glyphicon glyphicon-search input-group-addon search-icon"></span>
+        </div>
+        <br>
+        <div class="salary">
+          <p>salary</p>
+          <div slider max=100000 min=0 ng-model='salary' id='workHour'></div>
+          {{salary}}
+        </div>
+
+        <br>
+        <div class="workHour">
+          <p>workHour</p>
+          <div slider max=24 min=0  ng-model='workHour' id='workHour'></div>
+          {{workHour}}
+        </div>
       </div>
     </div>
     <div class="result-panel col-sm-4 hidden">
       <div class=" panel panel-default max-size">
-          <div class="panel-heading">
-            <strong>Job Detail</strong>
-            <button type="button" class="close" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+        <div class="panel-heading">
+          <strong>Job Detail</strong>
+          <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="panel-body col-centered">
+          <div class="change-term">
+            <button type="button" class="btn btn-default left change" ng-click="prev()" aria-label="Left Align">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default right change" ng-click="next()" aria-label="Left Align">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             </button>
           </div>
-          <div class="panel-body col-centered">
-            <div class="change-term">
-              <button type="button" class="btn btn-default left change" ng-click="prev()" aria-label="Left Align">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-              </button>
-              <button type="button" class="btn btn-default right change" ng-click="next()" aria-label="Left Align">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-              </button>
-            </div>
-            <div class="data">
-              <p>
-                {{jobSelect.title}} @ {{jobSelect.company.name}}
-                <br>
-                We are {{jobSelect.company.name}}
-                <br>
-                Requirements: ...
-                <br>
-                Salary: {{jobSelect.detail}}
-                <br>
-                Work hour: {{jobSelect.workhour}}
-              </p>
-              <div class="btn-centered">
-                <button class='btn' type="button" name="button">apply</button>
-              </div>
+          <div class="data">
+            <p>
+              {{jobSelect.title}} @ {{jobSelect.company.name}}
+              <br>
+              We are {{jobSelect.company.name}}
+              <br>
+              Requirements: ...
+              <br>
+              Salary: {{jobSelect.detail}}
+              <br>
+              Work hour: {{jobSelect.workhour}}
+            </p>
+            <div class="btn-centered">
+              <button class='btn' type="button" name="button">apply</button>
             </div>
           </div>
+        </div>
 
+      </div>
     </div>
   </div>
-  </body>
+-->
+</body>
 </html>

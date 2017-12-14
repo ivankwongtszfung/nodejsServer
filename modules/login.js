@@ -26,7 +26,7 @@ router.post('/',function(req,res){
 	if (req.body.username === undefined || req.body.password === undefined) {
     	res.status(401).json({success:false, message:'Missing Credentials'});
     	return;
-  	} else{ 
+  	} else{
 		users.find({Username: username, Password: md5(password).toUpperCase()},function(err,results){
 			if(err){
 				console.log(err);

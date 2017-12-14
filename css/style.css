@@ -47,3 +47,16 @@ button{
 .clicked{
   background-color: lightblue;
 }
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+img.slider{
+  width:900px;
+  height:350px;
+
+}
+.carousel-inner > .item > img {
+    margin: 0 auto;
+}

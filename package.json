@@ -11,5 +11,16 @@
     "npm"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivankwongtszfung/nodejsServer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ivankwongtszfung/nodejsServer/issues"
+  },
+  "homepage": "https://github.com/ivankwongtszfung/nodejsServer#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2"
+  }
 }

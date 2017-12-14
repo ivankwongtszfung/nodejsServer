@@ -85,6 +85,17 @@ app.controller('ctrl',['$scope','$http',function($scope,$http){
       }
     });
   });
+
+  $http.get("/item/listItem?sortCriteria=timestamp&ascending=true").then(function success(response){
+    console.log(response['data']);
+    var itemData = response['data'];
+    $scope.items=itemData.message;
+  },function error(response){
+    $scope.name="";
+    $('.alert').removeClass('hidden');
+  });
+
+
   // $scope.next = function() {
   //   console.log(this);
   //   if($scope.filteredItems.length==key+1){
@@ -127,5 +138,3 @@ app.directive('slider', function() {
         }
     };
 });
-
-

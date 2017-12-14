@@ -1,18 +1,18 @@
-		{
+		[{
 			"Username": "Sam",
 			"Password":	"6912A82FE02B1EEC067C057C3C8FAE9B",
 			"balance":	10,
 			"redeemed": []
-		}
+		},
 		{
 			"Username": "ivan",
 			"Password":	"6912A82FE02B1EEC067C057C3C8FAE9B",
 			"balance":	87,
 			"redeemed": []
-		}
+		},
 		{
 			"Username": "testing",
 			"Password":	"6912A82FE02B1EEC067C057C3C8FAE9B",
 			"balance":	1000,
 			"redeemed": []
-		}
+		}]
