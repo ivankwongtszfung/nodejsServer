@@ -47,6 +47,10 @@ app.get('/login', function (req, res) {
 	res.sendfile('login.html')
 });
 
+app.get('/product', function (req, res) {
+	res.sendfile('product.html')
+});
+
 
 app.post('/getData',function(req,res){
 	var url = "mongodb://localhost:27017/mydb";
