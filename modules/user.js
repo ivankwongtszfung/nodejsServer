@@ -6,6 +6,7 @@ var md5 = require( 'md5' );
 var json2csv = require('json2csv');
 var path = require('path');
 var jwt = require('jsonwebtoken');
+var authorization = require('./authorization');
 
 var secretKey = "ilovecjcjcjcjcj";//jwt webtoken secret
 
@@ -60,6 +61,9 @@ router.get('/verifyToken', (req, res) => {
     }
   })
 });
+
+
+router.use('/*',authorization);	//Must be below login and vertifyToken
 
 router.get('/showRedeemedItem',function(req,res){
 	var username = req.query['username'];

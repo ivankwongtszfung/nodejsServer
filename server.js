@@ -6,6 +6,7 @@ var app = express();
 var user = require('./modules/user');
 var item = require('./modules/item');
 var upload = require('./modules/upload');
+var authorization = require('./modules/authorization');
 
 //MongoDB connection
 var mongoose=require('mongoose');
@@ -23,23 +24,32 @@ db.once('open',function(){		//upon connection
 });
 
 process.on('SIGINT', function() {  	//upon node process end
-  mongoose.connection.close(function () { 
-    console.log('Mongoose default connection ' + 
-                'disconnected through app termination'); 
-    process.exit(0); 
-  }); 
-}); 
+  mongoose.connection.close(function () {
+    console.log('Mongoose default connection ' +
+                'disconnected through app termination');
+    process.exit(0);
+  });
+});
 //MongoDB connection end
 
 app.use('/js',express.static(__dirname + '/js'));
 app.use('/css',express.static(__dirname + '/css'));
 app.use('/data',express.static(__dirname + '/data'));
+
 app.use('/user',user);
+app.use('/*',authorization);	//must be below /user
+
+app.use('/img',express.static(__dirname + '/img'));
+
 app.use('/item',item);
 app.use('/upload',upload);
 
-app.get('/view', function (req, res) {
+app.get('/', function (req, res) {
 	res.sendfile('view.html')
+});
+
+app.get('/login', function (req, res) {
+	res.sendfile('login.html')
 });
 
 app.post('/getData',function(req,res){
@@ -51,7 +61,7 @@ app.post('/getData',function(req,res){
 			    db.close();
 			    res.status(200).json({data:result});
 			 });
-	});	
+	});
 });
 
 app.listen(8888);
