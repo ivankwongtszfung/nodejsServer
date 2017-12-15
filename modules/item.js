@@ -47,7 +47,7 @@ router.get('/listItem',function(req,res){
 		return;
 	}
 
-	items.find({},'_id Title Token_value Available_quantity Creation_timestamp',
+	items.find({},'_id Title Token_value Image Available_quantity Creation_timestamp',
 		function(err,results){
 			if(err){
 				console.log(err);
@@ -92,11 +92,13 @@ router.post('/insertItem',function(req,res){
 	var description = req.body['description'];
 	var token_value = req.body['token_value'];
 	var available_quantity = req.body['available_quantity'];
+	var image = req.body['Image'];
 	var tags = req.body['tags[]'];
 
 	var newItem = new items({
-		Title: title, Description: description, Image: "",Token_value: token_value, Available_quantity: available_quantity, Tags: tags, Creation_timestamp: Date.now()
+		Title: title, Description: description, Image: image,Token_value: token_value, Available_quantity: available_quantity, Tags: tags, Creation_timestamp: Date.now()
 	});
+	console.log(req.body);
 
 	newItem.save(function(err){
 		if(err){
@@ -134,6 +136,7 @@ router.post('/updateItem',function(req,res){
 //delete Item
 router.post('/deleteItem',function(req,res){
 	var id = req.body['id'];
+	console.log(id);
 	var objectId = mongoose.Types.ObjectId(id);
 
 	items.remove({_id: objectId},function(err,raw){
@@ -152,12 +155,14 @@ router.post('/redeemItem',function(req,res){
 	var id = req.body['id'];
 	var objectId = mongoose.Types.ObjectId(id);
 	var username = req.body['username'];
-
+	console.log(username);
+	console.log(id);
 	items.find({_id: objectId}, '_id Title Description Image Token_value Available_quantity Tags Creation_timestamp',
 		function(err,result){
 			if(err){
 				res.status(500).json({success:false, message:'Server Error'});
 			}
+			console.log("123456789")
 
 			if(result.length > 0){	//if target item found
 				if(result[0].Available_quantity<1){	//if no remaining left
@@ -166,24 +171,30 @@ router.post('/redeemItem',function(req,res){
 				}
 				users.find({Username: username},function(err,userResult){		//Get user balance
 					if(err){
+
 						res.status(500).json({success:false, message:'Server Error'});
 					}else{
 						if(userResult.length<1){	//if no such user
 							res.json({success:false, message:'No such user'});
 							return;
 						}
-						var userBalance = userResult[0].Balance;
+						var userBalance = userResult[0].balance;
+						console.log(userResult[0].balance);
+
 						if(userBalance<result[0].Token_value){		//if user not enough credit
 							res.json({success:false, message:'Not enough credit'});
 							return;
 						}
-						var	update = {$push:{"Redeemed" : {_id: result[0]._id, Title:result[0].Title, Token_value: result[0].Token_value, Redeemed_timestamp: Date.now()}}, //keep redeem record
-							  $set:{'Balance' : userBalance - result[0].Token_value}}; //deduct user balance
+						var	update = {$push:{"redeemed" : {_id: result[0]._id, Title:result[0].Title, Token_value: result[0].Token_value, Redeemed_timestamp: Date.now()}}, //keep redeem record
+							  $set:{'balance' : userBalance - result[0].Token_value}}; //deduct user balance
+
 						users.update({Username: username},update,function(err,raw){
 							if(err){
+								console.log(err);
 								res.status(500).json({success:false, message:'Server Error'});
 							}else{
 								//available quantity of item - 1
+								console.log("happy");
 								items.update({_id: objectId},{$set:{'Available_quantity': result[0].Available_quantity - 1}}, function(err,raw){
 									if(err){
 										res.status(500).json({success:false, message:'Server Error'});

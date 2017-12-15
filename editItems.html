@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://code.angularjs.org/1.5.0/angular-messages.min.js"></script>
+  <script src="../js/angular-utils-pagination/dirPagination.js"></script>
+  <script src="../js/adminEdit.js"></script>
+
+
+  <title>AdminPanel</title>
+</head>
+
+
+<body ng-app="myApp" ng-controller="ctrl">
+  <nav class="navbar navbar-default">
+   <div class="container-fluid">
+     <div class="navbar-header">
+       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar">
+         <span class="sr-only">Toggle navigation</span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+       </button>
+       <a class="navbar-brand" href="#">CSCI2720-Final Project</a>
+     </div>
+     <div id="navbar" class="navbar-collapse collapse in" aria-expanded="true" style="">
+       <ul class="nav navbar-nav">
+         <li class="active"><a href="#">Home</a></li>
+         <li><a href="#">Item</a></li>
+         <li id="redeem"><a href="../redeem">Redeem</a></li>
+         <li id="adminPanel"><a href="../adminPanel">AdminPanel</a></li>
+         <!--
+         <li class="dropdown">
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+           <ul class="dropdown-menu">
+             <li><a href="#">Action</a></li>
+             <li><a href="#">Another action</a></li>
+             <li><a href="#">Something else here</a></li>
+             <li role="separator" class="divider"></li>
+             <li class="dropdown-header">Nav header</li>
+             <li><a href="#">Separated link</a></li>
+             <li><a href="#">One more separated link</a></li>
+           </ul>
+         </li>
+       -->
+       </ul>
+       <ul class="nav navbar-nav navbar-right" id="loginBar">
+         <li id="isLoginFalse" ><a href="./login/">Login</a></li>
+         <li id="isLoginTrue" class="dropdown ">
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+             <span id="username">User</span>
+             <span class="caret"></span></a>
+           <ul class="dropdown-menu">
+             <li><p id="balance"></p></li>
+             <li role="separator" class="divider"></li>
+             <li><a id="logout">logout</a></li>
+             <!--
+             <li class="dropdown-header">Nav header</li>
+             <li><a href="#">Separated link</a></li>
+             <li><a href="#">One more separated link</a></li>
+           -->
+           </ul>
+         </li>
+       </ul>
+     </div><!--/.nav-collapse -->
+   </div><!--/.container-fluid -->
+ </nav>
+  <div class="container">
+    <div class="col-sm-9">
+          <form id="target" name="myForm" ng-submit="submitMyForm()" novalidate="" class="ng-pristine ng-valid-minlength ng-valid-maxlength ng-valid-min ng-valid-max ng-valid-step ng-valid ng-valid-required">
+
+
+            <div class="form-group">
+              <label for="title">title:</label>
+              <input type="Name" class="form-control ng-pristine ng-valid-minlength ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched" name="title" ng-model="myData.Title" ng-minlength="5" ng-maxlength="20" required="">
+
+              <div ng-messages="myForm.title.$error" ng-show="myForm.title.$touched" style="color:maroon" role="alert" class="ng-inactive">
+                <div  ng-message="required">You did not enter a field</div>
+                <div  ng-message="minlength">Field is too short</div>
+                <div  ng-message="maxlength">Field exceed 255</div>
+              </div>
+            </div>
+
+
+
+            <div class="form-group">
+              <label for="pwd">Description:</label>
+              <input type="Name" class="form-control ng-pristine ng-untouched ng-not-empty ng-valid ng-valid-required" name="description" ng-model="myData.Description" required="">
+              <div ng-messages="myForm.description.$error" ng-show="myForm.description.$touched" style="color:maroon" role="alert" class="ng-hide ng-inactive">
+                <!-- ngMessage: -->
+                <div  ng-message="required">You did not enter a field</div>
+                <div  ng-message="minlength">Field is too short</div>
+                <div  ng-message="maxlength">Field exceed 255</div>
+                <!-- ngMessage: minlength -->
+                <!-- ngMessage: maxlength -->
+              </div>
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="image">Available_quantity:</label>
+              <input type="number" min="0" max="100" class="form-control ng-pristine ng-untouched ng-valid-min ng-valid-max ng-valid-step ng-not-empty ng-valid ng-valid-required" name="available_quantity" ng-model="myData.Available_quantity" step="any" required="">
+              <div ng-messages="myForm.available_quantity.$error" ng-show="myForm.available_quantity.$touched" style="color:maroon" role="alert" class="ng-hide ng-inactive">
+                <div  ng-message="required">You did not enter a field</div>
+                <div  ng-message="min">Field is too short</div>
+                <div  ng-message="max">Field exceed 100</div>
+                <div  ng-message="number">Field should be number</div>
+                <!-- ngMessage: required -->
+                <!-- ngMessage: number -->
+                <!-- ngMessage: min -->
+                <!-- ngMessage: max -->
+              </div>
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="image">Token_value:</label>
+              <input type="number" min="0" max="100" class="form-control ng-pristine ng-untouched ng-valid-min ng-valid-max ng-valid-step ng-not-empty ng-valid ng-valid-required" name="token_value" ng-model="myData.Token_value" step="any" required="">
+              <div ng-messages="myForm.token_value.$error" ng-show="myForm.token_value.$touched" style="color:maroon" role="alert" class="ng-hide ng-inactive">
+                <div  ng-message="required">You did not enter a field</div>
+                <div  ng-message="min">Field is too short</div>
+                <div  ng-message="max">Field exceed 100</div>
+                <div  ng-message="number">Field should be number</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="image">Select image to upload:</label>
+              <input type="file" name="Image" id="image" ng-model="myData.Image" class="ng-pristine ng-untouched ng-valid ng-empty">
+            </div>
+
+
+             <div class="form-group">
+              <label for="string">tags:</label>
+              <input type="string" ng-minlength="5" ng-maxlength="100" class="form-control ng-pristine ng-untouched ng-valid-min ng-valid-max ng-valid-step ng-not-empty ng-valid ng-valid-required" name="tag" ng-model="myData.Tags" step="1" required="">
+              <div ng-messages="myForm.tag.$error" ng-show="myForm.tag.$error" style="color:maroon" role="alert" class="ng-inactive">
+                <div  ng-message="required">You did not enter a field</div>
+                <div  ng-message="minlength">Field is too short</div>
+                <div  ng-message="maxlength">Field exceed 255</div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-default" id="submit" >Submit</button>
+          </form>
+
+
+        </div>
+  </div>
+</body>
+
+</html>

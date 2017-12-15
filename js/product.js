@@ -2,6 +2,38 @@ var app = angular.module("myApp",[]);
 var key=0;
 
 app.controller('ctrl',['$scope','$http','$location',function($scope,$http,$location){
+  $('#isLoginTrue').hide();
+  $('#isLoginFalse').hide();
+  $("#redeem").hide();
+  $("#adminPanel").hide();
+  if(localStorage.getItem("token")){
+    console.log("123456789")
+    req={
+      method: 'GET',
+      url: '/user/verifyToken',
+      headers: {
+        Authorization: 'Bearer ' +  localStorage.getItem("token")
+      }
+    };
+    $http(req).then(function success(response){
+      $('#isLoginTrue').show();
+      $("#redeem").show();
+      if(response['data'].Username=="ivan")
+        $("#adminPanel").show();
+      var userData = response['data'];
+      $('#username').text(userData.Username);
+      $('#balance').text("Balance: "+userData.balance);
+    });
+  }
+  else{
+    console.log("abcdefg")
+    $('#isLoginFalse').show();
+  }
+
+  $('#logout').click(function(){
+    localStorage.clear();
+    location.reload();
+  });
   function getParameterByName(name, url) {
       if (!url) url = window.location.href;
       name = name.replace(/[\[\]]/g, "\\$&");
@@ -12,6 +44,7 @@ app.controller('ctrl',['$scope','$http','$location',function($scope,$http,$locat
       return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
   $( document ).ready(function(){
+    var formName;
     var id = getParameterByName('id');
     console.log(id);
     $http({
@@ -27,6 +60,27 @@ app.controller('ctrl',['$scope','$http','$location',function($scope,$http,$locat
       $('#error').text(response.data.message);
       $('.alert').removeClass('hidden');
     });
+
+    $scope.virtial=function(){
+      var formData = {
+        "id" : id,
+        "username" : formName
+      };
+      console.log(formData);
+      $http({
+        method:'POST',
+        url:"/item/redeemItem",
+        data:$.param(formData),
+        headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+      }).then(function success(response){
+        alert("Redeeem Success");
+      },function error(response){
+        alert("Redeeem failed");
+        console.log(response)
+      });
+    };
+
+
   });
 
 

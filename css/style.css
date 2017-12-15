@@ -1,3 +1,12 @@
+div#itemContainer{
+  margin-bottom:10rem;
+}
+p#balance{
+  align: right;
+}
+a#logout{
+  text-align: center;
+}
 .search-icon{
   top:0px;
 }
@@ -61,7 +70,6 @@ img.slider{
     margin: 0 auto;
 }
 .footer {
-    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;

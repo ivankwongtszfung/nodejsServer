@@ -30,7 +30,7 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Home</a></li>
         <li><a href="#">Item</a></li>
-        <li><a href="#">Redeem</a></li>
+        <li id="redeem"><a href="../redeem">Redeem</a></li>
         <!--
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
@@ -47,7 +47,22 @@
       -->
       </ul>
       <ul class="nav navbar-nav navbar-right" id="loginBar">
-        <li><a href="./login/">Login</a></li>
+        <li id="isLoginFalse" ><a href="./login/">Login</a></li>
+        <li id="isLoginTrue" class="dropdown ">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <span id="username">User</span>
+            <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><p id="balance"></p></li>
+            <li role="separator" class="divider"></li>
+            <li><a id="logout">logout</a></li>
+            <!--
+            <li class="dropdown-header">Nav header</li>
+            <li><a href="#">Separated link</a></li>
+            <li><a href="#">One more separated link</a></li>
+          -->
+          </ul>
+        </li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container-fluid -->
@@ -83,13 +98,13 @@
 
 <br>
 
-<div class="container">
+<div class="container" id="itemContainer">
 
   <div ng-repeat="(key, value) in items" >
 
     <div class="col-lg-4 col-md-4 mb-4 col-xs-4	col-sm-4">
       <div class="card h-100">
-        <a href="#"><img class="card-img-top" ng-src="img/{{value.Title}}.jpg" alt="http://placehold.it/700x400"></a>
+        <a href="#"><img class="card-img-top" ng-src="uploads/{{value.Image}}" alt="http://placehold.it/700x400"></a>
         <div class="card-body">
           <h4 class="card-title">
             <a ng-href="/product?id={{value._id}}">{{value.Title}}</a>

@@ -51,7 +51,9 @@ router.post('/login',function(req,res){
 });
 
 router.get('/verifyToken', (req, res) => {
-  jwt.verify(req.headers['authorization'], secretKey, (err, decoded) => {
+	var aut = req.headers['authorization'];
+	var token = aut.split(" ");
+  jwt.verify(token[1], secretKey, (err, decoded) => {
     if (err) {
       console.log(err);
       res.status(401).json(err);
@@ -70,7 +72,7 @@ router.get('/showRedeemedItem',function(req,res){
 			return;
 		}
 		if(result.length > 0){
-			res.status(200).json(result[0].Redeemed);
+			res.status(200).json(result[0].redeemed);
 		}else{
 			res.status(401).json({success:false, message:'No such user'});
 		}
@@ -80,13 +82,14 @@ router.get('/showRedeemedItem',function(req,res){
 
 router.get('/showAllRedeemedItem',function(req,res){
 	var redeemedList = [];
-	users.find({},'Username Redeemed',function(err,result){
+	users.find({},'Username redeemed',function(err,result){
 		if(err){
 			res.status(500).json({success:false, message:'Server Error'});
 			return;
 		}else if(result.length > 0){
 			for(var i=0;i<result.length;i++){
-				var arr = result[i].Redeemed;
+				var arr = result[i].redeemed;
+
 				var username = result[i].Username;
 				for(var j=0;j<arr.length;j++){
 					var obj = {};
@@ -107,13 +110,15 @@ router.get('/showAllRedeemedItem',function(req,res){
 
 router.get('/generateRedeemedCSV',function(req,res){
 	var redeemedList = [];
-	users.find({},'Username Redeemed',function(err,result){
+	users.find({},'Username redeemed',function(err,result){
 		if(err){
 			res.status(500).json({success:false, message:'Server Error'});
 			return;
 		}else if(result.length > 0){
 			for(var i=0;i<result.length;i++){
-				var arr = result[i].Redeemed;
+				var arr = [];
+				if(result[i].redeemed)
+					arr = result[i].redeemed;
 				var username = result[i].Username;
 				for(var j=0;j<arr.length;j++){
 					var obj = {};

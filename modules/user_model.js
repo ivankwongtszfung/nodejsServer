@@ -5,9 +5,9 @@ var ObjectId = Schema.ObjectId;
 var userSchema = new Schema({
         Username: String,
         Password: String,
-        Balance: Number,
-        Redeemed: [{
-      		_id: ObjectId, 
+        balance: Number,
+        redeemed: [{
+      		_id: ObjectId,
         	Title: String,
         	Description: String,
         	Token_value: Number,
@@ -15,4 +15,4 @@ var userSchema = new Schema({
         }]
 });
 
-module.exports = mongoose.model('users', userSchema);     
+module.exports = mongoose.model('users', userSchema);

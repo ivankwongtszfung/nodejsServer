@@ -1,8 +1,42 @@
 
+
 var app = angular.module("myApp",[]);
 var key=0;
 
 app.controller('ctrl',['$scope','$http',function($scope,$http){
+  $('#isLoginTrue').hide();
+  $('#isLoginFalse').hide();
+  $("#redeem").hide();
+  $("#adminPanel").hide();
+  if(localStorage.getItem("token")){
+    console.log("123456789")
+    req={
+      method: 'GET',
+      url: '/user/verifyToken',
+      headers: {
+        Authorization: 'Bearer ' +  localStorage.getItem("token")
+      }
+    };
+    $http(req).then(function success(response){
+      $('#isLoginTrue').show();
+      $("#redeem").show();
+      if(response['data'].Username=="ivan")
+        $("#adminPanel").show();
+      var userData = response['data'];
+      $('#username').text(userData.Username);
+      $('#balance').text("Balance: "+userData.balance);
+    });
+  }
+  else{
+    console.log("abcdefg")
+    $('#isLoginFalse').show();
+  }
+
+  $('#logout').click(function(){
+    localStorage.clear();
+    location.reload();
+  });
+
   $http.post("/getData").then(function success(response){
     console.log(response['data']['data']);
     $scope.name=response['data']['data'];
@@ -94,6 +128,8 @@ app.controller('ctrl',['$scope','$http',function($scope,$http){
     $scope.name="";
     $('.alert').removeClass('hidden');
   });
+
+
 
 
   // $scope.next = function() {

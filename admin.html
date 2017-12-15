@@ -9,11 +9,15 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="../js/product.js"></script>
+  <script src="https://code.angularjs.org/1.5.0/angular-messages.min.js"></script>
+  <script src="../js/angular-utils-pagination/dirPagination.js"></script>
+  <script src="../js/admin.js"></script>
 
 
-  <title>view1</title>
+  <title>AdminPanel</title>
 </head>
+
+
 <body ng-app="myApp" ng-controller="ctrl">
   <nav class="navbar navbar-default">
    <div class="container-fluid">
@@ -28,9 +32,10 @@
      </div>
      <div id="navbar" class="navbar-collapse collapse in" aria-expanded="true" style="">
        <ul class="nav navbar-nav">
-         <li class="active"><a href="#">Home</a></li>
+         <li><a href="../">Home</a></li>
          <li><a href="#">Item</a></li>
-         <li id="redeem"><a href="../redeem">Redeem</a></li>
+         <li><a href="../redeem">Redeem</a></li>
+         <li class="active"><a href="../adminPanel">AdminPanel</a></li>
          <!--
          <li class="dropdown">
            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
@@ -47,15 +52,15 @@
        -->
        </ul>
        <ul class="nav navbar-nav navbar-right" id="loginBar">
-         <li id="isLoginFalse" ><a href="./login/">Login</a></li>
-         <li id="isLoginTrue" class="dropdown ">
+         <li id="isLoginFalse"><a href="./login/">Login</a></li>
+         <li id="isLoginTrue" class="dropdown">
            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
              <span id="username">User</span>
              <span class="caret"></span></a>
            <ul class="dropdown-menu">
              <li><p id="balance"></p></li>
              <li role="separator" class="divider"></li>
-             <li><a id="logout">logout</a></li>
+             <li class="dropdown-header"><p>items</p></li>
              <!--
              <li class="dropdown-header">Nav header</li>
              <li><a href="#">Separated link</a></li>
@@ -67,39 +72,40 @@
      </div><!--/.nav-collapse -->
    </div><!--/.container-fluid -->
  </nav>
-
-
-<br>
-
 <div class="container">
-
-  <div id="item" ng-repeat="(key, value) in items" >
-
-    <div class="col-lg-8 col-md-8 mb-8 col-xs-8	col-sm-8">
-      <div class="card h-100">
-        <h3><img class="card-img-top" ng-src="uploads/{{value.Image}}" alt="http://placehold.it/700x400"></h3>
-        <div class="card-body">
-          <h3 class="card-title">
-            <a href="#">{{value.Title}}</a>
-          </h3>
-          <h4>Token:${{value.Token_value}}</h4>
-          <h4>{{value.Description}}</h4>
+  <button type="button" id="CSVButton" class="btn btn-primary pull-left" name="button">Create CSV</button>
+  <button type="button" id="createButton" class="btn btn-success pull-right" name="button">Create Item</button>
+  <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Token_value</th>
+            <th>Available_quantity</th>
+            <th>Creation_timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- ngRepeat: data in dataset|limitTo:20 -->
+          <tr  dir-paginate="item in items | itemsPerPage: pageSize" current-page="currentPage" class="ng-scope">
+            <th scope="row" class="ng-binding">{{$index+1+(currentPage-1)*pageSize}}</th>
+            <td class="ng-binding">{{item.Title}}</td>
+            <td class="ng-binding">{{item.Token_value}}</td>
+            <td class="ng-binding">{{item.Available_quantity}}</td>
+            <td class="ng-binding">{{item.Creation_timestamp}}</td>
+            <td>
+              <a class="glyphicon glyphicon-edit edit" ng-href="/adminPanel/edit?id={{item._id}}"></a>
+              <i></i>
+              <i id="6" class="glyphicon glyphicon-remove delete" ng-click="deleteClick(item._id)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="other-controller">
+        <div class="text-center">
+        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" ></dir-pagination-controls>
         </div>
-        <div class="card-footer">
-          <small class="text-muted">Only {{value.Available_quantity}} left</small>
-          <small class="text-muted">{{value.Creation_timestamp}}</small>
-        </div>
-        <button class="btn btn-success" id="redeem" ng-click="virtial()">redeem</button>
       </div>
-    </div>
-  </div>
+  </body>
 </div>
-
-<footer class="footer bd-footer text-muted">
-  <div class="container">
-    <p>Designed and built with all the love in the world by <a href="https://github.com/ivankwongtszfung/" target="_blank">@Ivan</a> and <a href="https://github.com/samhoooo/" target="_blank">@Sam</a>.
-    <p>Currently v1.0.0. Course CSCI2720 CUHK</p>
-  </div>
-</footer>
-</body>
 </html>

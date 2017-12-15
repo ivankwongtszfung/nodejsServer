@@ -6,7 +6,6 @@ var app = express();
 var user = require('./modules/user');
 var item = require('./modules/item');
 var upload = require('./modules/upload');
-
 //MongoDB connection
 var mongoose=require('mongoose');
 var dbUri = "mongodb://localhost/272Proj";
@@ -37,6 +36,7 @@ app.use('/data',express.static(__dirname + '/data'));
 app.use('/user',user);
 app.use('/item',item);
 app.use('/upload',upload);
+app.use('/uploads',express.static(__dirname + '/uploads'));
 app.use('/img',express.static(__dirname + '/img'));
 
 app.get('/', function (req, res) {
@@ -51,6 +51,21 @@ app.get('/product', function (req, res) {
 	res.sendfile('product.html')
 });
 
+app.get('/adminPanel', function (req, res) {
+	res.sendfile('admin.html')
+});
+
+app.get('/adminPanel/edit', function (req, res) {
+	res.sendfile('editItems.html')
+});
+
+app.get('/adminPanel/create', function (req, res) {
+	res.sendfile('createItem.html')
+});
+
+app.get('/redeem', function (req, res) {
+	res.sendfile('redeem.html')
+});
 
 app.post('/getData',function(req,res){
 	var url = "mongodb://localhost:27017/mydb";

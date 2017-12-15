@@ -19,6 +19,7 @@ var upload = multer({storage: storage});	//specify upload location and extension
 
 //handling single file upload
 router.post('/photoUpload',upload.single('logo'),function(req,res,next){
+	console.log(req.file)
 	if(req.file==undefined)
 		res.status(401).json({success:false, message:'No request file found'});
 	else{
