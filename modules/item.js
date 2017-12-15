@@ -10,6 +10,12 @@ var mongoose=require('mongoose');
 var items = require('./item_model.js');
 var users = require('./user_model.js');
 
+var sanitizeHtml = require('sanitize-html');
+
+var jwt = require('jsonwebtoken');
+var secretKey = "ilovecjcjcjcjcj";
+var adminUser = "ivan";
+
 router.get('/hi',function(req,res){
 	res.send("hi from item api");
 });
@@ -94,18 +100,40 @@ router.post('/insertItem',function(req,res){
 	var available_quantity = req.body['available_quantity'];
 	var tags = req.body['tags[]'];
 
-	var newItem = new items({
-		Title: title, Description: description, Image: "",Token_value: token_value, Available_quantity: available_quantity, Tags: tags, Creation_timestamp: Date.now()
+	//Input checking start
+	var cleanTitle = sanitizeHtml(title,{allowedTags: []});
+	var cleanDescription = sanitizeHtml(description, {
+  		allowedTags: [ 'b', 'i', 'u', 'pre', 'p', 'br' ],
 	});
-
-	newItem.save(function(err){
-		if(err){
-			res.status(500).json({success:false, message:'Server Error'});
-			return;
-		}
-		res.json({success:true, message:'Successfully inserted!'});
+	if(token_value<0 || available_quantity<0){
+		res.status(500).json({success:false, message:'invalid input value'});
 		return;
-	});
+	}
+	for(var i=0;i<tags.length;i++){
+		var cleanTag = sanitizeHtml(tags[i],{allowedTags: []});
+		tags[i] = cleanTag;
+	}
+	//Input checking end
+
+	jwt.verify(req.headers['authorization'], secretKey, (err, decoded) => {
+    	if(decoded.Username != adminUser){
+            res.json({"success":false,"message":"You are not the admin user!"});
+            return;
+        }else{
+        	var newItem = new items({
+				Title: cleanTitle, Description: cleanDescription, Image: "",Token_value: token_value, Available_quantity: available_quantity, Tags: tags, Creation_timestamp: Date.now()
+			});
+
+			newItem.save(function(err){
+				if(err){
+					res.status(500).json({success:false, message:'Server Error'});
+					return;
+				}
+				res.json({success:true, message:'Successfully inserted!'});
+				return;
+			});
+        }
+    });
 });
 
 //Update Item
@@ -116,45 +144,94 @@ router.post('/updateItem',function(req,res){
 	var token_value = req.body['token_value'];
 	var available_quantity = req.body['available_quantity'];
 	var tags = req.body['tags[]'];
-	var objectId = mongoose.Types.ObjectId(id);
 
-	var condition = {_id: objectId},
-		update = {$set:{Title: title, Description: description, Token_value: token_value, Available_quantity: available_quantity, Tags:tags}};
-	items.update(condition, update, function(err,raw){
-		if(err){
-			res.status(500).json({success:false, message:'Server Error'});
-			return;
-		}else{
-			res.json({success:true, message:raw});
-			return;
-		}
+	//Input checking start
+	var cleanId = sanitizeHtml(id,{allowedTags: []});
+	var cleanTitle = sanitizeHtml(title,{allowedTags: []});
+	var cleanDescription = sanitizeHtml(description, {
+  		allowedTags: [ 'b', 'i', 'u', 'pre', 'p', 'br' ],
 	});
+	if(token_value<0 || available_quantity<0){
+		res.status(500).json({success:false, message:'invalid input value'});
+		return;
+	}
+	for(var i=0;i<tags.length;i++){
+		var cleanTag = sanitizeHtml(tags[i],{allowedTags: []});
+		tags[i] = cleanTag;
+	}
+	//Input checking end
+
+	jwt.verify(req.headers['authorization'], secretKey, (err, decoded) => {
+    	if(decoded.Username != adminUser){
+            res.json({"success":false,"message":"You are not the admin user!"});
+            return;
+        }else{
+        	var objectId = mongoose.Types.ObjectId(cleanId);
+
+			var condition = {_id: objectId},
+			update = {$set:{Title: title, Description: description, Token_value: token_value, Available_quantity: available_quantity, Tags:tags}};
+			items.update(condition, update, function(err,raw){
+				if(err){
+					res.status(500).json({success:false, message:'Server Error'});
+					return;
+				}else{
+					res.json({success:true, message:raw, note:'nModified is the number of record modified'});
+					return;
+				}
+			});
+        }
+    });
 });
 
 //delete Item
 router.post('/deleteItem',function(req,res){
 	var id = req.body['id'];
-	var objectId = mongoose.Types.ObjectId(id);
 
-	items.remove({_id: objectId},function(err,raw){
-		if(err){
-			res.status(500).json({success:false, message:'Server Error'});
-			return;
-		}else{
-			res.json({success:true, message:raw});
-			return;
-		}
-	});
+	//input checking start
+	var cleanId = sanitizeHtml(id,{allowedTags: []});
+	//Input checking end
+
+	//check if JWT token is admin user
+	jwt.verify(req.headers['authorization'], secretKey, (err, decoded) => {
+    	if(decoded.Username != adminUser){
+            res.json({"success":false,"message":"You are not the admin user!"});
+            return;
+        }else{
+        	var objectId = mongoose.Types.ObjectId(cleanId);
+
+			items.remove({_id: objectId},function(err,raw){
+				if(err){
+					res.status(500).json({success:false, message:'Server Error'});
+					return;
+				}else{
+					res.json({success:true, sysmessage:raw, note:'n in sysmessage is the number of record deleted'});
+					return;
+				}
+			});
+        }
+    });
 });
 
 //redeem Item
 router.post('/redeemItem',function(req,res){
 	var id = req.body['id'];
-	var objectId = mongoose.Types.ObjectId(id);
 	var username = req.body['username'];
 
-	items.find({_id: objectId}, '_id Title Description Image Token_value Available_quantity Tags Creation_timestamp',
-		function(err,result){
+	//input checking start
+	var cleanId = sanitizeHtml(id,{allowedTags: []});
+	var cleanUsername = sanitizeHtml(username,{allowedTags: []});
+	//Input checking end
+
+	var objectId = mongoose.Types.ObjectId(id);
+
+	//check if JWT token belongs to the username
+	jwt.verify(req.headers['authorization'], secretKey, (err, decoded) => {
+    	if(decoded.Username != cleanUsername){
+            res.json({"success":false,"message":"You are not the authorizated user!"});
+            return;
+		}else{
+			items.find({_id: objectId}, '_id Title Description Image Token_value Available_quantity Tags Creation_timestamp',
+			function(err,result){
 			if(err){
 				res.status(500).json({success:false, message:'Server Error'});
 			}
@@ -164,7 +241,7 @@ router.post('/redeemItem',function(req,res){
 					res.json({success:false, message:'The item has no available quantity'});
 					return;
 				}
-				users.find({Username: username},function(err,userResult){		//Get user balance
+				users.find({Username: cleanUsername},function(err,userResult){		//Get user balance
 					if(err){
 						res.status(500).json({success:false, message:'Server Error'});
 					}else{
@@ -179,7 +256,7 @@ router.post('/redeemItem',function(req,res){
 						}
 						var	update = {$push:{"Redeemed" : {_id: result[0]._id, Title:result[0].Title, Token_value: result[0].Token_value, Redeemed_timestamp: Date.now()}}, //keep redeem record
 							  $set:{'Balance' : userBalance - result[0].Token_value}}; //deduct user balance
-						users.update({Username: username},update,function(err,raw){
+						users.update({Username: cleanUsername},update,function(err,raw){
 							if(err){
 								res.status(500).json({success:false, message:'Server Error'});
 							}else{
@@ -189,7 +266,7 @@ router.post('/redeemItem',function(req,res){
 										res.status(500).json({success:false, message:'Server Error'});
 										return;
 									}else{
-										res.json({success:true, message:raw});	//return redeem success
+										res.json({success:true, message:'redeem success', sysMessage:raw });	//return redeem success
 									}
 								});
 							}
@@ -200,7 +277,10 @@ router.post('/redeemItem',function(req,res){
 				res.json({success:false, message:'No item found'});
 			}
 		}
-	);
+		);
+
+		}
+  	});
 });
 
 module.exports = router;

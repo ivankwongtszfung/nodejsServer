@@ -9,6 +9,7 @@ var jwt = require('jsonwebtoken');
 var authorization = require('./authorization');
 
 var secretKey = "ilovecjcjcjcjcj";//jwt webtoken secret
+var adminUser = "ivan";
 
 //bodyparser
 var bodyParser = require('body-parser');
@@ -16,6 +17,7 @@ router.use(bodyParser.urlencoded({extended:false}));
 
 var mongoose=require('mongoose');
 var users = require('./user_model.js');
+var sanitizeHtml = require('sanitize-html');
 
 router.get('/hi',function(req,res){
 	res.send("hi from login api");
@@ -64,19 +66,35 @@ router.get('/verifyToken', (req, res) => {
 });
 
 
-router.use('/*',authorization);	//Must be below login and vertifyToken
+router.use('/*',authorization);	//Must placed below login and vertifyToken
 
 router.get('/showRedeemedItem',function(req,res){
 	var username = req.query['username'];
-	users.find({Username: username},function(err,result){
-		if(err){
-			res.status(500).json({success:false, message:'Server Error'});
-			return;
-		}
-		if(result.length > 0){
-			res.status(200).json(result[0].Redeemed);
+
+	//start input checking
+	if(username==undefined){
+		res.json({"success":false,"message":"Missing username"});
+        return;
+	}
+	var cleanUsername = sanitizeHtml(username,{allowedTags: []});
+	//end input checking
+
+	jwt.verify(req.headers['authorization'], secretKey, (err, decoded) => {
+    	if(decoded.Username != cleanUsername){
+            res.json({"success":false,"message":"You are not the authorizated user!"});
+            return;
 		}else{
-			res.status(401).json({success:false, message:'No such user'});
+			users.find({Username: username},function(err,result){
+			if(err){
+				res.status(500).json({success:false, message:'Server Error'});
+				return;
+			}
+			if(result.length > 0){
+				res.status(200).json(result[0].Redeemed);
+			}else{
+				res.status(401).json({success:false, message:'No such user'});
+			}
+			});
 		}
 	});
 	return;
@@ -84,63 +102,79 @@ router.get('/showRedeemedItem',function(req,res){
 
 router.get('/showAllRedeemedItem',function(req,res){
 	var redeemedList = [];
-	users.find({},'Username Redeemed',function(err,result){
-		if(err){
-			res.status(500).json({success:false, message:'Server Error'});
-			return;
-		}else if(result.length > 0){
-			for(var i=0;i<result.length;i++){
-				var arr = result[i].Redeemed;
-				var username = result[i].Username;
-				for(var j=0;j<arr.length;j++){
-					var obj = {};
-					obj.Username = username;
-					obj._id = arr[j]._id;
-					obj.Title = arr[j].Title;
-					obj.Token_value = arr[j].Token_value;
-					obj.Redeemed_timestamp = arr[j].Redeemed_timestamp;
-					redeemedList.push(obj);
+
+	jwt.verify(req.headers['authorization'], secretKey, (err, decoded) => {
+    	if(decoded.Username != adminUser){
+            res.json({"success":false,"message":"You are not the admin user!"});
+            return;
+        }else{
+        	users.find({},'Username Redeemed',function(err,result){
+			if(err){
+				res.status(500).json({success:false, message:'Server Error'});
+				return;
+			}else if(result.length > 0){
+				for(var i=0;i<result.length;i++){
+					var arr = result[i].Redeemed;
+					var username = result[i].Username;
+					for(var j=0;j<arr.length;j++){
+						var obj = {};
+						obj.Username = username;
+						obj._id = arr[j]._id;
+						obj.Title = arr[j].Title;
+						obj.Token_value = arr[j].Token_value;
+						obj.Redeemed_timestamp = arr[j].Redeemed_timestamp;
+						redeemedList.push(obj);
+					}
 				}
+				//console.log(redeemedList);
+				res.status(200).json(redeemedList);
 			}
-			//console.log(redeemedList);
-			res.status(200).json(redeemedList);
-		}
-	});
+			});
+        }
+    });
 	return;
 });
 
 router.get('/generateRedeemedCSV',function(req,res){
 	var redeemedList = [];
-	users.find({},'Username Redeemed',function(err,result){
-		if(err){
-			res.status(500).json({success:false, message:'Server Error'});
-			return;
-		}else if(result.length > 0){
-			for(var i=0;i<result.length;i++){
-				var arr = result[i].Redeemed;
-				var username = result[i].Username;
-				for(var j=0;j<arr.length;j++){
-					var obj = {};
-					obj.Username = username;
-					obj._id = arr[j]._id;
-					obj.Title = arr[j].Title;
-					obj.Token_value = arr[j].Token_value;
-					obj.Redeemed_timestamp = arr[j].Redeemed_timestamp;
-					redeemedList.push(obj);
+
+	jwt.verify(req.headers['authorization'], secretKey, (err, decoded) => {
+    	if(decoded.Username != adminUser){
+            res.json({"success":false,"message":"You are not the admin user!"});
+            return;
+        }else{
+        	users.find({},'Username Redeemed',function(err,result){
+			if(err){
+				res.status(500).json({success:false, message:'Server Error'});
+				return;
+			}else if(result.length > 0){
+				for(var i=0;i<result.length;i++){
+					var arr = result[i].Redeemed;
+					var username = result[i].Username;
+					for(var j=0;j<arr.length;j++){
+						var obj = {};
+						obj.Username = username;
+						obj._id = arr[j]._id;
+						obj.Title = arr[j].Title;
+						obj.Token_value = arr[j].Token_value;
+						obj.Redeemed_timestamp = arr[j].Redeemed_timestamp;
+						redeemedList.push(obj);
+					}
 				}
+				//Generate CSV
+				var fields = ['Username', '_id', 'Title', 'Token_value', 'Redeemed_timestamp'];
+
+				var csv = json2csv({ data: redeemedList, fields: fields });
+
+  				fs.writeFile('temp/file.csv', csv, function(err) {		//generate CSV file on server
+  					if (err) throw err;
+  					console.log('file generated');
+  					res.sendFile(path.join(__dirname,'../temp','file.csv'));	//send CSV file
+				});
 			}
-			//Generate CSV
-			var fields = ['Username', '_id', 'Title', 'Token_value', 'Redeemed_timestamp'];
-
-			var csv = json2csv({ data: redeemedList, fields: fields });
-
-  			fs.writeFile('temp/file.csv', csv, function(err) {		//generate CSV file on server
-  				if (err) throw err;
-  				console.log('file generated');
-  				res.sendFile(path.join(__dirname,'../temp','file.csv'));	//send CSV file
 			});
-		}
-	});
+        }
+    });
 	return;
 });
 
