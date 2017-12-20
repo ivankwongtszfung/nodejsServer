@@ -6,6 +6,11 @@ var app = express();
 var user = require('./modules/user');
 var item = require('./modules/item');
 var upload = require('./modules/upload');
+<<<<<<< HEAD
+=======
+var authorization = require('./modules/authorization');
+
+>>>>>>> aaccd9cdba4fd713d4b9abb53a74dc84ec2326f7
 //MongoDB connection
 var mongoose=require('mongoose');
 var dbUri = "mongodb://localhost/272Proj";
@@ -33,7 +38,12 @@ process.on('SIGINT', function() {  	//upon node process end
 app.use('/js',express.static(__dirname + '/js'));
 app.use('/css',express.static(__dirname + '/css'));
 app.use('/data',express.static(__dirname + '/data'));
+
 app.use('/user',user);
+app.use('/*',authorization);	//must be below /user
+
+app.use('/img',express.static(__dirname + '/img'));
+
 app.use('/item',item);
 app.use('/upload',upload);
 app.use('/uploads',express.static(__dirname + '/uploads'));
