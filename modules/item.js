@@ -112,16 +112,18 @@ router.post('/insertItem',function(req,res){
 
 //Update Item
 router.post('/updateItem',function(req,res){
+	console.log(req.body)
 	var id = req.body['id'];
 	var title = req.body["title"];
 	var description = req.body['description'];
 	var token_value = req.body['token_value'];
 	var available_quantity = req.body['available_quantity'];
 	var tags = req.body['tags[]'];
+	var image = req.body['image'];
 	var objectId = mongoose.Types.ObjectId(id);
 
 	var condition = {_id: objectId},
-		update = {$set:{Title: title, Description: description, Token_value: token_value, Available_quantity: available_quantity, Tags:tags}};
+		update = {$set:{Title: title, Description: description, Token_value: token_value, Available_quantity: available_quantity,Image: image, Tags:tags}};
 	items.update(condition, update, function(err,raw){
 		if(err){
 			res.status(500).json({success:false, message:'Server Error'});

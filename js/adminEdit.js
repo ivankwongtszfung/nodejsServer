@@ -28,6 +28,10 @@ app.controller('ctrl',['$scope','$http',function($scope,$http){
       var userData = response['data'];
       $('#username').text(userData.Username);
       $('#balance').text("Balance: "+userData.balance);
+    },function error(response){
+      localStorage.clear();
+      console.log("abcdefg")
+      $('#isLoginFalse').show();
     });
   }
   else{
@@ -110,6 +114,7 @@ app.controller('ctrl',['$scope','$http',function($scope,$http){
      console.log(formData)
      var fd = new FormData();
      fd.append('logo',$('input#image')[0].files[0]);
+     console.log(fd)
       $.ajax({
        method:'POST',
        url: "http://localhost:8888/upload/photoUpload",
@@ -118,13 +123,14 @@ app.controller('ctrl',['$scope','$http',function($scope,$http){
       contentType: false,
       success: function(data){
         console.log(data.filename);
-        formData.Image = data.filename;
+        formData.image = data.filename;
         $http({
           method:'POST',
           url: "http://localhost:8888/item/updateItem",
           data:$.param(formData),
           headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
         }).then(function success(response){
+          alert("update Success")
           location.href = "http://localhost:8888/adminPanel";
         },function error(response){
           alert(response)

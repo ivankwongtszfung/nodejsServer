@@ -31,6 +31,8 @@ app.controller('ctrl',['$scope','$http',function($scope,$http){
       var userData = response['data'];
       $('#username').text(userData.Username);
       $('#balance').text("Balance: "+userData.balance);
+    },function error(response){
+      location.href="http://localhost:8888/"
     });
   }
   else{

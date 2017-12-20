@@ -1,7 +1,7 @@
 var app = angular.module("myApp",[]);
 var key=0;
 
-app.controller('ctrl',['$scope','$http','$location',function($scope,$http,$location){
+app.controller('ctrl',['$scope','$http','$location','$sce',function($scope,$http,$location,$sce){
   $('#isLoginTrue').hide();
   $('#isLoginFalse').hide();
   $("#redeem").hide();
@@ -23,6 +23,10 @@ app.controller('ctrl',['$scope','$http','$location',function($scope,$http,$locat
       var userData = response['data'];
       $('#username').text(userData.Username);
       $('#balance').text("Balance: "+userData.balance);
+    },function error(response){
+      localStorage.clear();
+      console.log("abcdefg")
+      $('#isLoginFalse').show();
     });
   }
   else{
@@ -54,6 +58,8 @@ app.controller('ctrl',['$scope','$http','$location',function($scope,$http,$locat
     }).then(function success(response){
       console.log(response['data'].message);
       $scope.items=response['data'].message;
+	  $scope.trustedHtml = $sce.trustAsHtml(response['data'].message[0].Description);
+
     },function error(response){
       $scope.name="";
       console.log(response);
@@ -64,9 +70,8 @@ app.controller('ctrl',['$scope','$http','$location',function($scope,$http,$locat
     $scope.virtial=function(){
       var formData = {
         "id" : id,
-        "username" : formName
+        "username" : $("#username").text()
       };
-      console.log(formData);
       $http({
         method:'POST',
         url:"/item/redeemItem",

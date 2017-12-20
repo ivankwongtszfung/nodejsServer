@@ -25,6 +25,10 @@ app.controller('ctrl',['$scope','$http',function($scope,$http){
       var userData = response['data'];
       $('#username').text(userData.Username);
       $('#balance').text("Balance: "+userData.balance);
+    },function error(response){
+    	localStorage.clear();
+    	console.log("abcdefg")
+    	$('#isLoginFalse').show();
     });
   }
   else{

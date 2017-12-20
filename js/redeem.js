@@ -39,6 +39,10 @@ app.controller('ctrl',['$scope','$http',function($scope,$http){
         $scope.name="";
         $('.alert').removeClass('hidden');
       });
+    },function error(response){
+      localStorage.clear();
+      console.log("abcdefg")
+      $('#isLoginFalse').show();
     });
   }
   else{

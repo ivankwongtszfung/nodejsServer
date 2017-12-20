@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../css/style.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="../js/product.js"></script>
 
@@ -83,7 +84,7 @@
             <a href="#">{{value.Title}}</a>
           </h3>
           <h4>Token:${{value.Token_value}}</h4>
-          <h4>{{value.Description}}</h4>
+          <h4 class="text-muted" ng-bind-html="trustedHtml"></h4>
         </div>
         <div class="card-footer">
           <small class="text-muted">Only {{value.Available_quantity}} left</small>
