@@ -1,0 +1,36 @@
+{
+  "name": "nodejsserver",
+  "version": "1.0.0",
+  "description": "we have make multiple pages the homepage the redeem the adminpanel the product page",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.0",
+    "json2csv": "^4.3.5",
+    "jsonwebtoken": "^8.5.0",
+    "md5": "^2.2.1",
+    "mongoose": "^5.4.19",
+    "multer": "^1.4.1",
+    "sanitize-html": "^1.20.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivankwongtszfung/nodejsServer.git"
+  },
+  "keywords": [
+    "nodejs",
+    "angularjs"
+  ],
+  "author": "IvanKwongTszFung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivankwongtszfung/nodejsServer/issues"
+  },
+  "homepage": "https://github.com/ivankwongtszfung/nodejsServer#readme"
+}

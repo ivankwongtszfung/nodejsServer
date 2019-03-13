@@ -147,6 +147,7 @@ router.post('/insertItem',function(req,res){
         }
     });
 });
+});
 
 //Update Item
 router.post('/updateItem',function(req,res){
@@ -207,6 +208,7 @@ router.post('/updateItem',function(req,res){
 			});
         }
     });
+});
 });
 
 //delete Item
@@ -321,6 +323,7 @@ router.post('/redeemItem',function(req,res){
 
 		}
   	});
+});
 });
 
 module.exports = router;
